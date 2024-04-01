@@ -1,0 +1,150 @@
+//@version=5
+
+// This indicator, titled 'Year percents', is designed to overlay a chart with yearly pivot points, previous year's high, low, and close (HLC) values, as well as percentage calculations from previous years' HLC. 
+// It allows traders to visualize yearly performance and pivotal levels which can act as support and resistance. 
+// The indicator includes options to display yearly pivots and the previous years' HLC and percentage changes from those levels. 
+// This can provide insight into market sentiment and potential reversal points over the long term.
+
+indicator(title='Year percents', shorttitle='y', overlay=true)
+
+
+sy = input(false, title='Show Yearly Pivots?')
+
+
+lyhlc = input(true, title='Show Previous Years HLC and %HL?')
+
+// Request previous years' close, high, and low data for calculating yearly percentages
+lyc = request.security(syminfo.tickerid, '12M', close[1], lookahead=barmerge.lookahead_on)
+lyh = request.security(syminfo.tickerid, '12M', high[1], lookahead=barmerge.lookahead_on)
+lyl = request.security(syminfo.tickerid, '12M', low[1], lookahead=barmerge.lookahead_on)
+
+l2yc = request.security(syminfo.tickerid, '12M', close[2], lookahead=barmerge.lookahead_on)
+l2yh = request.security(syminfo.tickerid, '12M', high[2], lookahead=barmerge.lookahead_on)
+l2yl = request.security(syminfo.tickerid, '12M', low[2], lookahead=barmerge.lookahead_on)
+
+l3yc = request.security(syminfo.tickerid, '12M', close[3], lookahead=barmerge.lookahead_on)
+l3yh = request.security(syminfo.tickerid, '12M', high[3], lookahead=barmerge.lookahead_on)
+l3yl = request.security(syminfo.tickerid, '12M', low[3], lookahead=barmerge.lookahead_on)
+
+l4yc = request.security(syminfo.tickerid, '12M', close[4], lookahead=barmerge.lookahead_on)
+l4yh = request.security(syminfo.tickerid, '12M', high[4], lookahead=barmerge.lookahead_on)
+l4yl = request.security(syminfo.tickerid, '12M', low[4], lookahead=barmerge.lookahead_on)
+
+l5yc = request.security(syminfo.tickerid, '12M', close[5], lookahead=barmerge.lookahead_on)
+l5yh = request.security(syminfo.tickerid, '12M', high[5], lookahead=barmerge.lookahead_on)
+l5yl = request.security(syminfo.tickerid, '12M', low[5], lookahead=barmerge.lookahead_on)
+
+l6yc = request.security(syminfo.tickerid, '12M', close[6], lookahead=barmerge.lookahead_on)
+l6yh = request.security(syminfo.tickerid, '12M', high[6], lookahead=barmerge.lookahead_on)
+l6yl = request.security(syminfo.tickerid, '12M', low[6], lookahead=barmerge.lookahead_on)
+
+//per start
+
+// Lows
+// Calculate percentage from last year's low to this year's close to determine yearly performance
+p1Low = -(lyl - l2yc) / l2yc * 100
+p1Loplot = lyc - lyc / 100 * p1Low
+// Plot the 1-year percentage low as a cross on the chart for visual reference
+plot(lyhlc and p1Loplot ? p1Loplot : na, title='1y%Lo', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+p2Low = -(l2yl - l3yc) / l3yc * 100
+p2Loplot = lyc - lyc / 100 * p2Low
+plot(lyhlc and p2Loplot ? p2Loplot : na, title='2y%Lo', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+p3Low = -(l3yl - l4yc) / l4yc * 100
+p3Loplot = lyc - lyc / 100 * p3Low
+plot(lyhlc and p3Loplot ? p3Loplot : na, title='3y%Lo', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+p4Low = -(l4yl - l5yc) / l5yc * 100
+p4Loplot = lyc - lyc / 100 * p4Low
+plot(lyhlc and p4Loplot ? p4Loplot : na, title='4y%Lo', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+p5Low = -(l5yl - l6yc) / l6yc * 100
+p5Loplot = lyc - lyc / 100 * p5Low
+plot(lyhlc and p5Loplot ? p5Loplot : na, title='5y%Lo', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+
+// Highs
+// Calculate and plot high percentage changes from previous years to visualize yearly highs' performance
+p1Hi = (lyh - l2yc) / l2yc * 100
+p1Hiplot = lyc + lyc / 100 * p1Hi
+plot(lyhlc and p1Hiplot ? p1Hiplot : na, title='1y%Hi', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+p2Hi = (l2yh - l3yc) / l3yc * 100
+p2Hiplot = lyc + lyc / 100 * p2Hi
+plot(lyhlc and p2Hiplot ? p2Hiplot : na, title='2y%Hi', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+p3Hi = (l3yh - l4yc) / l4yc * 100
+p3Hiplot = lyc + lyc / 100 * p3Hi
+plot(lyhlc and p3Hiplot ? p3Hiplot : na, title='3y%Hi', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+p4Hi = (l4yh - l5yc) / l5yc * 100
+p4Hiplot = lyc + lyc / 100 * p4Hi
+plot(lyhlc and p4Hiplot ? p4Hiplot : na, title='4y%Hi', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+p5Hi = (l5yh - l6yc) / l6yc * 100
+p5Hiplot = lyc + lyc / 100 * p5Hi
+plot(lyhlc and p5Hiplot ? p5Hiplot : na, title='5y%Hi', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+//per finish
+plot(lyhlc and lyc ? lyc : na, title='LYC', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and lyh ? lyh : na, title='LYH', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and lyl ? lyl : na, title='LYL', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+plot(lyhlc and l2yc ? l2yc : na, title='2YC', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and l2yh ? l2yh : na, title='2YH', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and l2yl ? l2yl : na, title='2YL', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+
+plot(lyhlc and l3yc ? l3yc : na, title='3YC', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and l3yh ? l3yh : na, title='3YH', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and l3yl ? l3yl : na, title='3YL', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+plot(lyhlc and l4yc ? l4yc : na, title='4YC', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and l4yh ? l4yh : na, title='4YH', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and l4yl ? l4yl : na, title='4YL', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+plot(lyhlc and l5yc ? l5yc : na, title='5YC', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and l5yh ? l5yh : na, title='5YH', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+plot(lyhlc and l5yl ? l5yl : na, title='5YL', style=plot.style_cross, color=color.new(color.yellow, 0), linewidth=1)
+
+
+// Pivot calculation based on the average of high, low, and close prices
+pivot = (high + low + close) / 3.0
+
+// Fibonacci pivot points calculation to understand potential reversal levels
+r1 = pivot + (high - low) * 0.382
+s1 = pivot - (high - low) * 0.382
+r2 = pivot + (high - low) * 0.618
+s2 = pivot - (high - low) * 0.618
+r3 = pivot + (high - low) * 0.786
+s3 = pivot - (high - low) * 0.786
+r4 = pivot + (high - low) * 1
+s4 = pivot - (high - low) * 1
+
+
+//Yearly Pivots
+ytime_pivot = request.security(syminfo.tickerid, '12M', pivot[1], lookahead=barmerge.lookahead_on)
+ytime_R1 = request.security(syminfo.tickerid, '12M', r1[1], lookahead=barmerge.lookahead_on)
+ytime_S1 = request.security(syminfo.tickerid, '12M', s1[1], lookahead=barmerge.lookahead_on)
+ytime_R2 = request.security(syminfo.tickerid, '12M', r2[1], lookahead=barmerge.lookahead_on)
+ytime_S2 = request.security(syminfo.tickerid, '12M', s2[1], lookahead=barmerge.lookahead_on)
+ytime_R3 = request.security(syminfo.tickerid, '12M', r3[1], lookahead=barmerge.lookahead_on)
+ytime_S3 = request.security(syminfo.tickerid, '12M', s3[1], lookahead=barmerge.lookahead_on)
+ytime_R4 = request.security(syminfo.tickerid, '12M', r4[1], lookahead=barmerge.lookahead_on)
+ytime_S4 = request.security(syminfo.tickerid, '12M', s4[1], lookahead=barmerge.lookahead_on)
+
+
+// Yearly pivot plot to visualize the main pivot level for the year on the chart
+plot(lyhlc and ytime_pivot ? ytime_pivot : na, title='YP', style=plot.style_cross, color=color.new(#FF33F3, 0), linewidth=1)
+// Plot yearly resistance levels based on Fibonacci calculations for strategic planning
+plot(sy and ytime_R1 ? ytime_R1 : na, title='YR1', style=plot.style_line, color=color.new(color.white, 0), linewidth=5, show_last=1)
+plot(sy and ytime_S1 ? ytime_S1 : na, title='YS1', style=plot.style_line, color=color.new(color.white, 0), linewidth=5, show_last=1)
+plot(sy and ytime_R2 ? ytime_R2 : na, title='YR2', style=plot.style_line, color=color.new(color.white, 0), linewidth=5, show_last=1)
+plot(sy and ytime_S2 ? ytime_S2 : na, title='YS2', style=plot.style_line, color=color.new(color.white, 0), linewidth=5, show_last=1)
+plot(sy and ytime_R3 ? ytime_R3 : na, title='YR3', style=plot.style_line, color=color.new(color.white, 0), linewidth=5, show_last=1)
+plot(sy and ytime_S3 ? ytime_S3 : na, title='YS3', style=plot.style_line, color=color.new(color.white, 0), linewidth=5, show_last=1)
+plot(sy and ytime_R4 ? ytime_R4 : na, title='YR4', style=plot.style_line, color=color.new(color.white, 0), linewidth=5, show_last=1)
+plot(sy and ytime_S4 ? ytime_S4 : na, title='YS4', style=plot.style_line, color=color.new(color.white, 0), linewidth=5, show_last=1)
+
+
